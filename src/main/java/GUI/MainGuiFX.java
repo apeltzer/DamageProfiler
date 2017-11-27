@@ -4,8 +4,10 @@ import IO.Communicator;
 import calculations.StartCalculations;
 import javafx.application.Application;
 
+import javafx.collections.FXCollections;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -13,10 +15,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.TilePane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.concurrent.Task;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainGuiFX extends Application {
@@ -38,6 +46,7 @@ public class MainGuiFX extends Application {
     private Stage primaryStage;
     private ProgressBar progressBar;
     private Task startCalculuations;
+    private ComboBox comboBox_library;
 
     @Override
     public void start(Stage primaryStage) {
@@ -117,6 +126,7 @@ public class MainGuiFX extends Application {
             communicator.setLength(Integer.parseInt(textfield_length.getText()));
             communicator.setThreshold(Integer.parseInt(textfield_threshold.getText()));
             communicator.setSpecie_name(textfield_specie.getText());
+            communicator.setLibrary(comboBox_library.getSelectionModel().getSelectedItem().toString());
             if(!checkbox_dynamic_y_axis_height.isSelected()){
                 try {
                     communicator.setyAxis(Double.parseDouble(textfield_y_axis_height.getText()));
@@ -184,6 +194,7 @@ public class MainGuiFX extends Application {
         Label label_title = new Label("Set title");
         Label label_plot = new Label("Plot");
         label_plot.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+        Label label_library = new Label("Set library");
 
         Label label_calculations = new Label("Calculations");
         label_calculations.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
@@ -205,6 +216,11 @@ public class MainGuiFX extends Application {
         checkbox_dynamic_y_axis_height.setSelected(true);
         textfield_y_axis_height.setDisable(true);
 
+        comboBox_library =new ComboBox( FXCollections.observableArrayList(
+                "Single-stranded library",
+                "Double-stranded library"
+        ));
+        comboBox_library.getSelectionModel().selectLast();
 
         // add components to grid
 
@@ -233,6 +249,8 @@ public class MainGuiFX extends Application {
         //          CALCULATIONS
 
         root.add(label_calculations, 0, ++row, 1,1);
+        root.add(label_library, 0,++row,1,1);
+        root.add(comboBox_library, 1, row, 2,1);
         root.add(label_length, 0, ++row, 1,1);
         root.add(textfield_length, 1, row, 2,1);
         root.add(new Separator(), 0, ++row,3,1);
@@ -250,6 +268,44 @@ public class MainGuiFX extends Application {
             }
         }
         return tmp;
+    }
+
+
+    public static Pane createHorizontalButtonBox(
+            final List<Button> buttons,
+            final Pos alignment,
+            final double spacing) {
+
+        return createSameWidthHorizontalButtonBox(
+                buttons,
+                alignment,
+                spacing
+        );
+    }
+
+    private static Pane createSameWidthHorizontalButtonBox(
+            List<Button> buttons,
+            Pos alignment,
+            double spacing)
+    {
+        TilePane tiles = new TilePane(
+                Orientation.HORIZONTAL,
+                spacing,
+                0,
+                buttons.toArray(
+                        new Button[buttons.size()]
+                )
+        );
+        tiles.setMinWidth(TilePane.USE_PREF_SIZE);
+        tiles.setPrefRows(1);
+        tiles.setAlignment(alignment);
+
+        buttons.forEach(b -> {
+            b.setMinWidth(Button.USE_PREF_SIZE);
+            b.setMaxWidth(Double.MAX_VALUE);
+        });
+
+        return tiles;
     }
 
 

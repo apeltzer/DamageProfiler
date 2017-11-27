@@ -24,19 +24,16 @@ public class BamFileChooserFX {
 
         ArrayList<String> files = new ArrayList<String>();
 
-        try{
+        if(f != null) {
 
             for (int i = 0; i < f.size(); i++){
                 files.add(f.get(i).getAbsolutePath());
             }
 
             c.setInput(files.get(0));
-            System.out.println(files.get(0));
-
-        } catch (Exception e){
+            //System.out.println(files.get(0));
 
         }
-
 
         }
 

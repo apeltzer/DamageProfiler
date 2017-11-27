@@ -22,6 +22,7 @@ public class Communicator {
 
     // plot settings
     private String title_plots;
+    public String library;
 
 
 //
@@ -127,6 +128,14 @@ public class Communicator {
 
     public void setTitle_plots(String title_plots) {
         this.title_plots = title_plots;
+    }
+
+    public String getLibrary() {
+        return library;
+    }
+
+    public void setLibrary(String library) {
+        this.library = library;
     }
 
     //    public boolean isPerform_rescaling() {
