@@ -4,25 +4,19 @@ import IO.Communicator;
 import calculations.StartCalculations;
 import javafx.application.Application;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.concurrent.Task;
-import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
 
 
 public class MainGuiFX extends Application {
@@ -148,18 +142,13 @@ public class MainGuiFX extends Application {
                 progressBar.progressProperty().bind(startCalculuations.progressProperty());
 
                 startCalculuations.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, //
-                        new EventHandler<WorkerStateEvent>() {
-
-                            @Override
-                            public void handle(WorkerStateEvent t) {
-                                if(starter.isCalculationsDone()){
-                                    primaryStage.close();
-                                }
+                        (EventHandler<WorkerStateEvent>) t -> {
+                            if(starter.isCalculationsDone()){
+                                primaryStage.close();
                             }
                         });
                 new Thread(startCalculuations).start();
 
-                //this.primaryStage.close();
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
